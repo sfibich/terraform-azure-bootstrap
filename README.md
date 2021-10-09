@@ -1,11 +1,10 @@
 # terraform-azure-bootstrap: 
-### Enterprise-grade Terraform built for the individual 
+### Enterprise-grade Terraform/Azure backend built for the individual 
 
 ![terraform-azure-bootstrap](terraform-azure-boostrap.png)
 
 ## Intro 
-
-The terraform-azure-bootstrap project contains two scripts.  The first script ConfigureAzureForSecureTerraformAccess.sh creates the Azure infrastructure store state files as blobs on Azure storage.  It also creates the necessary objects to manage Azure using an SPN from a Terraform perspective.  It does this by creating a resource group, a key vault, and spn and a storage account.  The Key Vault stores the SPN client id and secret securely.  
+The terraform-azure-boostrap project provides an enterprise-ready backend using Azure resources.  Using the terraform-azure-bootstrap, move your Terraform state files to Azure Storage and use an App Registration Client Id and Client Secret for authorization to Azure.  This allows you to decouple the permissions from your account to that of the App Registration.  It also allows you to share state files across your organization with other developers or CICD pipelines.  Lastly, it allows you to release the same terraform code to different environments without overwriting state files and without modifying the terraform code or having some sort of pre-execution replacement script run.
 
 ## Requirements
 
