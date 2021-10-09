@@ -1,7 +1,18 @@
-# setup 
-These scripts are design to help with Azure setup and Terraform execution.  In general the scripts provide a robust personal setup for development work with terraform.  The setup with additional refinement could be used as part of an overall enterprise solution for Terraform.  
+# Intro 
+The terraform-azure-bootstrap project contains two scripts.  The first script ConfigureAzureForSecureTerraformAccess.sh creates the Azure infrastructure store state files as blobs on Azure storage.  It also creates the necessary objects to manage Azure using an SPN from a Terraform perspective.  It does this by creating a resource group, a key vault, and spn and a storage account.  The Key Vault stores the SPN client id and secret securely.  
 
-## setup Example
+## Requirements
+- AZ Cli
+- An Azure Account
+- Bash Shell
+
+## Contents
+- Intro (#intro)
+- Requirements (#requirements)
+- Inital Setup (#Inital)
+
+
+## Initial Setup
 ```{r, engine='sh', count_lines}
 az account login
 cd /setup
