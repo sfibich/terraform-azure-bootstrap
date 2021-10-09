@@ -1,4 +1,5 @@
-# terraform-azure-bootstrap: Enterprise-grade Terraform work  for the individual 
+# terraform-azure-bootstrap: 
+### Enterprise-grade Terraform built for the individual 
 
 ![terraform-azure-bootstrap](terraform-azure-boostrap.png)
 
