@@ -8,8 +8,8 @@ The terraform-azure-boostrap project provides an enterprise-ready backend using 
 
 ## Requirements
 
-- AZ Cli
-- An Azure Account
+- The AZ CLI
+- An Azure Subscription
 - Bash Shell
 
 ## Contents
