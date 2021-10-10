@@ -4,6 +4,7 @@ This example creates three different Azure Resource Groups that are prefixed wit
 
 Executing the script three times as indicated below will create the resource groups and create three different blobs in the Azure Storage Container used to hold terraform state information; each blob is a key and has its own name based on the information in the tfvars file.
 
+![Simple Test Resoruce Groups](rg.png)
 
 ## Bootstrapping - from example directory
 (per project/environment switch)
