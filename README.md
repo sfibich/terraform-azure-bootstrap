@@ -25,20 +25,15 @@ The terraform-azure-boostrap project provides an enterprise-ready backend using 
 
 ```{r, engine='sh', count_lines}
 az account login
-cd /setup
 ./ConfigureAzureForSecureTerraformAccess.sh
-source ./LoadAzureTerraformSecretsToEnvVars.sh
-cd ../simpleTestResourceGroup
-terraform init
-terraform plan
 ```
 
-## Bootstrapping
+## Bootstrapping - from example directory
 (per project/environment switch)
 
 ```
-source ./LoadAzureTerrformSecretsToEnvVars.sh
-terraform plan
+source ../TerraformAzureBootstrap.sh -f dev/dev.tfvars
+terraform apply -var-file dev/dev.tfvars
 ```
 
 ## Scripts
@@ -47,11 +42,6 @@ terraform plan
 
 The script creates a resource group, a key vault, a storage account, and an SPN.  It loads the client id, client secret, tenant id, subscription id, and storage account access key into the key vault. Next, the script grants the current user ownership over the key vault. Finally, it uses the current subscription the user is logged into to create the resources.
 
-### LoadAzureTerraformSecretsToEnvVars.sh
+### TerraformAzureBootStrap.sh
 
-This script loads the information in the Azure Key Vault to session variables so that Terraform can use them to execute scripts without 
-having to provide the information manually.  It also sets up the access key to a storage account so it can be used to manage terraform state.
- 
-### bareBonesTools.sh
-
-Bash shell script to install tools necessary to run the other two scripts as well as Terrafrom
+The script loads information based on the account logged into Azure.  It expects the default subscription to contain a key vault named terraform-kv and a storage account named something that ends in terraform all within the resource group called terraform-mgmt-rg.  The ConfigureAzureForSecureTerraformAccess creates these objects. So, if that script has been previously executed, the required objects should exist.  The script then pulls the required azurerm configuration information from the key vault.  It also expects a tfvars file passed to it, which is the environment file for the project.  This file defines the terraform azurerm container_name and key for terraform state information.  The same tfvars file can contain other environment-specific variables for the project as well.  Using this script allows you to use the same terraform script for multiple environments without changing remote state values or worrying about overwriting state information. 
