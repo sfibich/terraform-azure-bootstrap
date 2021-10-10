@@ -31,6 +31,9 @@
 #    This script was modeled after Adam Rush's script LoadAzureTerraformSecretsToEnvVars.ps1 https://github.com/adamrushuk.	#
 #																															#
 #############################################################################################################################
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 SKIP=FALSE
 OPTIND=1
 while getopts :m:f:k:r:s: flag
@@ -90,12 +93,6 @@ fi
 
 }
 
-function get_backend_values() {
-
-	BACKEND_STORAGE_ACCOUNT=$(az storage account list --resource-group $TERRAFORM_RESOURCE_GROUP --query "[?contains(@.name, 'terraform')==\`true\`].name" --output tsv)
-	BACKEND_CONTAINER=terraform-state
-}
-
 
 function get_keyvault_values() {
 
@@ -111,7 +108,7 @@ if [ -z "$CURRENT_SUBSCRIPTION_ID" ]
 		printf '%s\n' "ERROR! Not logged in to Azure. Run az account login" >&2
 #		exit 1
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 #####################
@@ -125,7 +122,7 @@ if [ -z "$KEY_VAULT_NAME" ]
 		printf '%s\n' "ERROR! No Azure Key Vault with name pattern like $KEY_VAULT_NAME_PATTERN" >&2
 #		exit 1
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 #############################
@@ -137,7 +134,7 @@ if [ -z "$ARM_SUBSCRIPTION_ID" ]
 	then 
 		printf '%s\n' "FAILURE! Azure Key Vault missing secret ARM-SUBSCRIPITON-ID" >&2
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 echo "Loading ARM_CLIENT_ID..."
@@ -146,7 +143,7 @@ if [ -z "$ARM_CLIENT_ID" ]
 	then 
 		printf '%s\n' "FAILURE! Azure Key Vault missing secret ARM-CLIENT-ID" >&2
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 echo "Loading ARM_CLIENT_SECERT"
@@ -155,7 +152,7 @@ if [ -z "$ARM_CLIENT_SECRET" ]
 	then 
 		printf '%s\n' "FAILURE! Azure Key Vault missing secret ARM-CLIENT-SECRET" >&2
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 echo "Loading ARM_TENANT_ID..."
@@ -164,7 +161,7 @@ if [ -z "$ARM_TENANT_ID" ]
 	then 
 		printf '%s\n' "FAILURE! Azure Key Vault missing secret ARM-TENANT-ID" >&2
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
 echo "Loading ARM_ACCESS_KEY..."
@@ -173,19 +170,16 @@ if [ -z "$ARM_ACCESS_KEY" ]
 	then 
 		printf '%s\n' "FAILURE! Azure Key Vault missing secret ARM-ACCESS_KEY" >&2
 	else
-		echo "SUCCESS!"
+		echo "${YELLOW}SUCCESS!${NC}"
 fi
 
-echo "Loading TF_VAR_target_subscription_id.."
-if [ -z "$USER_SUBSCRIPTION" ]
-	then
-		TF_VAR_target_subscription_id=$ARM_SUBSCRIPTION_ID
-		echo "Used ARM_SUBSCRIPTION_ID from key vault...SUCCESS"
-	else
-		TF_VAR_target_subscription_id=$USER_SUBSCRIPTION
-		echo "Used value passed w/script...SUCCESS"
-fi
 }
+
+function get_backend_values() {
+
+	BACKEND_STORAGE_ACCOUNT=$(az storage account list --resource-group $TERRAFORM_RESOURCE_GROUP --query "[?contains(@.name, 'terraform')==\`true\`].name" --output tsv)
+}
+
 
 function output_info() {
 	echo "************************************************************************"
@@ -198,32 +192,19 @@ function output_info() {
 	echo "ARM_ACCESS_KEY:      $ARM_ACCESS_KEY"
 	echo "************************************************************************"
 	echo ""
-	echo "************************************************************************"
-	echo "                              BACKEND VALUES"
-	echo "************************************************************************"
-	echo "TF_VAR_target_subscription_id:$TF_VAR_target_subscription_id"
-	echo "TERRAFORM_RESOURCE_GROUP:     $TERRAFORM_RESOURCE_GROUP"
-	echo "BACKEND_STORAGE_ACCOUNT:      $BACKEND_STORAGE_ACCOUNT"
-	echo "BACKEND_CONTAINER:            $BACKEND_CONTAINER"
-	echo "************************************************************************"
-	echo ""
-	echo "************************************************************************"
-	echo "                              TF VALUES for EXPORT"
-	echo "************************************************************************"
-	echo "TF_VAR_target_subscription_id: $TF_VAR_target_subscription_id"
-	export TF_VAR_target_subscription_id=$TF_VAR_target_subscription_id
-	export ARM_CLIENT_ID=$ARM_CLIENT_ID
-	export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
-	export ARM_TENANT_ID=$ARM_TENANT_ID
-	export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
-	export ARM_ACCESS_KEY=$ARM_ACCESS_KEY
+	export ARM_CLIENT_ID
+	export ARM_CLIENT_SECRET
+	export ARM_TENANT_ID
+	export ARM_SUBSCRIPTION_ID
+	export ARM_ACCESS_KEY
 }
 
 function terraform_init() {
 
-	echo "Running: terraform init --backend-config='storage_account_name=$BACKEND_STORAGE_ACCOUNT' --backend-config='key=$STATE_KEY' --backend-config='container_name=$STATE_CONTAINER_NAME'"
+	TERRAFORM_INIT="terraform init --backend-config='storage_account_name=$BACKEND_STORAGE_ACCOUNT' --backend-config='key=$STATE_KEY' --backend-config='container_name=$STATE_CONTAINER_NAME' --reconfigure"
+	echo "Running: $TERRAFORM_INIT"
 
-	terraform init --backend-config='storage_account_name=$BACKEND_STORAGE_ACCOUNT' --backend-config='key=$STATE_KEY' --backend-config='container_name=$STATE_CONTAINER_NAME'
+	bash -c $TERRAFORM_INIT
 
 }
 #####################
@@ -233,8 +214,8 @@ function terraform_init() {
 if [[ $SKIP == "FALSE" ]]
 	then
 		set_core_variables
-		get_backend_values
 		get_keyvault_values
+		get_backend_values
 		read_env_file
 		output_info
 		terraform_init
