@@ -161,7 +161,7 @@ az keyvault secret set --name ARM-SUBSCRIPTION-ID --value $CURRENT_SUBSCRIPTION_
 az keyvault secret set --name ARM-CLIENT-ID --value $APP_ID --vault-name $KEY_VAULT_NAME --output none
 az keyvault secret set --name ARM-CLIENT-SECRET --value $PASSWORD --vault-name $KEY_VAULT_NAME --output none
 az keyvault secret set --name ARM-TENANT-ID --value $TENANT_ID --vault-name $KEY_VAULT_NAME --output none
-az keyvault secret set --name ARM-ACCESS-KEY --value $CURRENT_SUBSCRIPTION_ID --vault-name $KEY_VAULT_NAME --output none
+az keyvault secret set --name ARM-ACCESS-KEY --value $ARM_ACCESS_KEY --vault-name $KEY_VAULT_NAME --output none
 
 #################
 # Ending Output	#

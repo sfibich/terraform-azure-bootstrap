@@ -24,7 +24,7 @@ The terraform-azure-boostrap project provides an enterprise-ready backend using 
 (once per environment) 
 
 ```{r, engine='sh', count_lines}
-az account login
+az login --use-device-code
 ./ConfigureAzureForSecureTerraformAccess.sh
 ```
 
