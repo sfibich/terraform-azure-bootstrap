@@ -1,0 +1,10 @@
+Release 1.1.0
+-- App Registration name is now 'terraform-' plus the md5 has of the current subscription id.  
+---- This will create a new App Registration if re-run in a subscription where it was previously run.
+-- Added Resource Policy Contributor to the app registration
+-- Configure script now renews certificates and keys it they already exists
+-- Updated examples to use env instead of dev, test, and prod folders
+-- BUG FIX: App ID now correctly stored in Key Vault instead of Tenant ID 
+
+Release 1.0
+--Initial release

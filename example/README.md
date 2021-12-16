@@ -10,14 +10,14 @@ Executing the script three times as indicated below will create the resource gro
 (per project/environment switch)
 
 ```
-source ../TerraformAzureBootstrap.sh -f dev/dev.tfvars
-terraform apply -var-file dev/dev.tfvars
+source ../TerraformAzureBootstrap.sh -f env/dev.tfvars
+terraform apply -var-file env/dev.tfvars
 
-source ../TerraformAzureBootstrap.sh -f test/test.tfvars
-terraform apply -var-file test/test.tfvars
+source ../TerraformAzureBootstrap.sh -f env/test.tfvars
+terraform apply -var-file env/test.tfvars
 
-source ../TerraformAzureBootstrap.sh -f prod/prod.tfvars
-terraform apply -var-file prod/prod.tfvars
+source ../TerraformAzureBootstrap.sh -f env/prod.tfvars
+terraform apply -var-file env/prod.tfvars
 
 ```
 

@@ -1,10 +1,6 @@
 # Configure the Azure provider
 terraform {
-  backend azurerm {}
-  #  backend "azurerm" {
-  #  container_name       = "terraform-state"
-  #  key                  = "terraform.tfstate.example-rg"
-  #}
+  backend "azurerm" {}
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
